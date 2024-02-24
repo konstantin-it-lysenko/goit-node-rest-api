@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import { middlewares } from "../middleware/index.js";
+import { handleMongooseError } from "../middleware/index.js";
 
 const contactSchema = new Schema({
     name: {
@@ -16,12 +16,17 @@ const contactSchema = new Schema({
     favorite: {
         type: Boolean,
         default: false
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+        required: true
     }
 }, { versionKey: false, timestamps: true });
 
-contactSchema.post("save", middlewares.handleMongooseError)
+contactSchema.post("save", handleMongooseError)
 
-const createContactSchema = Joi.object({
+export const createContactSchema = Joi.object({
     name: Joi.string()
         .max(30)
         .required()
@@ -37,21 +42,17 @@ const createContactSchema = Joi.object({
     favorite: Joi.boolean()
 })
 
-const updateContactSchema = Joi.object({
+export const updateContactSchema = Joi.object({
     name: Joi.string().max(30),
     email: Joi.string().email(),
-    phone: Joi.string().min(9).max(18)
+    phone: Joi.string().min(9).max(18),
+    favorite: Joi.boolean()
 });
 
-const updateFavoriteSchema = Joi.object({
+export const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean()
         .required()
         .messages({ "any.required": "Missing required favorite field" })
 })
 
 export const Contact = model('contact', contactSchema);
-export const schemas = {
-    createContactSchema,
-    updateContactSchema,
-    updateFavoriteSchema
-}
