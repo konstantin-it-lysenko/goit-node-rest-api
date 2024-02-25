@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fs from "fs/promises";
 import { User } from '../models/user.js';
 import { asyncTryCatch, HttpError } from '../helpers/index.js';
 import dotenv from "dotenv";
@@ -58,12 +59,9 @@ export const login = asyncTryCatch(async (req, res) => {
 })
 
 export const getCurrent = asyncTryCatch(async (req, res) => {
-    const { email, name } = req.user;
+    const { email, subscription } = req.user;
 
-    res.json({
-        email,
-        subscription
-    })
+    res.json({ email, subscription });
 })
 
 export const logout = asyncTryCatch(async (req, res) => {
@@ -82,5 +80,5 @@ export const updateSubscription = asyncTryCatch(async (req, res) => {
 
     res.json({
         message: "Subscription has been updated successfully",
-    });
-});
+    })
+})
