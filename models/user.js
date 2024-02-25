@@ -19,11 +19,15 @@ const userSchema = new Schema({
     subscription: {
         type: String,
         enum: ["starter", "pro", "business"],
-        default: "starter",
+        default: "starter"
     },
     token: {
         type: String,
         default: ""
+    },
+    avatarURL: {
+        type: String,
+        required: [true, "Avatar is required"]
     }
 }, { versionKey: false, timestamps: true });
 
@@ -66,7 +70,6 @@ export const loginSchema = Joi.object({
 export const updateSubscriptionSchema = Joi.object({
     subscription: Joi.string()
         .valid("starter", "pro", "business")
-        .required()
         .messages({
             "any.required": "Subscription is required",
             "any.only": "Subscription has only 3 values: starter, pro, business",
