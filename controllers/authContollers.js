@@ -1,12 +1,16 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import path from "path";
+import gravatar from "gravatar";
+// import { nanoid } from "nanoid";
 import { User } from '../models/user.js';
 import { asyncTryCatch, HttpError } from '../helpers/index.js';
-import dotenv from "dotenv";
 
 dotenv.config();
 
 const { SECRET_KEY } = process.env;
+// const avatarsDir = path.resolve("public", "avatars");
 
 export const register = asyncTryCatch(async (req, res) => {
     const { email, password } = req.body;
@@ -17,12 +21,14 @@ export const register = asyncTryCatch(async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
 
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
+    console.log(newUser);
     res.status(201).json({
         user: {
             email: newUser.email,
-            subscription: newUser.subscription,
+            subscription: newUser.subscription
         },
     })
 })
@@ -58,7 +64,7 @@ export const login = asyncTryCatch(async (req, res) => {
 })
 
 export const getCurrent = asyncTryCatch(async (req, res) => {
-    const { email, name } = req.user;
+    const { email, subscription } = req.user;
 
     res.json({
         email,
@@ -82,5 +88,25 @@ export const updateSubscription = asyncTryCatch(async (req, res) => {
 
     res.json({
         message: "Subscription has been updated successfully",
-    });
-});
+    })
+})
+
+export const updateAvatar = asyncTryCatch(async (req, res) => {
+    // const { _id } = req.user;
+
+    // const user = await User.findByIdAndUpdate(_id);
+    // console.log(req.file);
+    const { path: tempUpload, originalName } = req.file;
+    console.log(req.user);
+    const resultUpload = path.resolve(avatarsDir, originalName);
+
+    await fs.rename(tempUpload, resultUpload);
+
+    const cover = path.resolve("avatars", originalName);
+    const newContact = {
+        id: nanoid(),
+        ...req.body,
+        cover
+    }
+    res.status(201).json(newContact);
+})
