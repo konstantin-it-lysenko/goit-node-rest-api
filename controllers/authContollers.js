@@ -1,14 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 import dotenv from "dotenv";
 import fs from "fs/promises";
 import path from "path";
 import Jimp from "jimp";
 import gravatar from "gravatar";
 // import { nanoid } from "nanoid";
-
-import fs from "fs/promises";
 
 import { User } from '../models/user.js';
 import { asyncTryCatch, HttpError } from '../helpers/index.js';
