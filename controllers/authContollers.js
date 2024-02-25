@@ -1,11 +1,15 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 import dotenv from "dotenv";
 import fs from "fs/promises";
 import path from "path";
 import Jimp from "jimp";
 import gravatar from "gravatar";
 // import { nanoid } from "nanoid";
+
+import fs from "fs/promises";
+
 import { User } from '../models/user.js';
 import { asyncTryCatch, HttpError } from '../helpers/index.js';
 
@@ -68,10 +72,7 @@ export const login = asyncTryCatch(async (req, res) => {
 export const getCurrent = asyncTryCatch(async (req, res) => {
     const { email, subscription } = req.user;
 
-    res.json({
-        email,
-        subscription
-    })
+    res.json({ email, subscription });
 })
 
 export const logout = asyncTryCatch(async (req, res) => {
