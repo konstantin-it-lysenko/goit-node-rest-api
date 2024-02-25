@@ -28,6 +28,14 @@ const userSchema = new Schema({
     avatarURL: {
         type: String,
         required: [true, "Avatar is required"]
+    },
+    verify: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required']
     }
 }, { versionKey: false, timestamps: true });
 
@@ -53,6 +61,16 @@ export const registerSchema = Joi.object({
         .messages({
             "any.only": "Subscription has only 3 values: starter, pro, business",
         })
+})
+
+export const verificationEmailSchema = Joi.object({
+    email: Joi.string()
+        .email()
+        .required()
+        .messages({
+            "string.email": "Email must be a valid address",
+            "any.required": "Missing required email field",
+        }),
 })
 
 export const loginSchema = Joi.object({

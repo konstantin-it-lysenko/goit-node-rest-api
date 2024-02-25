@@ -6,5 +6,6 @@ import { User } from "./user.js";
 import { registerSchema } from "./user.js";
 import { loginSchema } from "./user.js";
 import { updateSubscriptionSchema } from "./user.js";
+import { verificationEmailSchema } from "./user.js";
 
-export { Contact, createContactSchema, updateContactSchema, updateFavoriteSchema, User, registerSchema, loginSchema, updateSubscriptionSchema };
+export { Contact, createContactSchema, updateContactSchema, updateFavoriteSchema, User, registerSchema, loginSchema, updateSubscriptionSchema, verificationEmailSchema };
